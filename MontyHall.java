@@ -9,6 +9,92 @@ public class MontyHall
  */
  public static void main(String[] args)
  {
+  if (args.length == 0) {
+   // TODO Run interactive
+   // TODO Put that in a new method 
+   interactiveGame();
+  }
+  
+  else {
+  // TODO Write the simulation part
+   int numSims = Integer.parseInt(args[0]);
+   System.out.println("Going to run " + numSims + " simulations. ");
+   
+   simulateGame(numSims);
+  }
+ }
+ public static void simulateGame(int times) {
+  int swapGames = 0;
+  int swapWins = 0;
+  int stayGames = 0;
+  int stayWins = 0;
+  
+
+  
+  int userDoor;
+  boolean swapOrStay;
+  boolean result; 
+   while (times > 0) { 
+    userDoor = (int) (Math.random() * 3 + 1);
+    swapOrStay = Math.random() > 0.5; // Generate a random boolean 
+    result = simulateSingleGame(userDoor, swapOrStay); 
+    if(result && swapOrStay) {
+     System.out.println("Both true");
+    }
+
+    if (swapOrStay) {
+  	  swapGames++;
+	  if (result) {
+      swapWins++;
+      System.out.println("Hello");
+     }
+    }
+    else {
+     stayGames++;
+     if (result) {
+      stayWins++;
+     }
+    }
+    
+    times--;
+     
+   }
+  
+  double swapSuccessRate = (double) swapWins / swapGames;
+  double staySuccessRate = (double) stayWins / stayGames;
+  System.out.println("You won " + swapSuccessRate + " of the games when you swapped. ");
+  System.out.println("You won " + staySuccessRate + " of the games when you stayed. "); 
+  
+ 
+ }
+ 
+ 
+ 
+ /**
+  * Simulates a single game of Monty Hall
+  * @param userDoor The door the user wants to play
+  * @param swapOrStay Whether the user wants to swap doors or not 
+  * @return Whether the user wins 
+  */
+ public static boolean simulateSingleGame(int userDoor, boolean swapOrStay){
+  //Choose a random car Door
+  int carDoor = (int)(Math.random() * 3 + 1);
+  
+  // Open a goat door
+  int revealDoor = revealDoor(carDoor, userDoor); 
+  
+  if (swapOrStay) {
+   userDoor = getOtherDoor(userDoor, revealDoor); 
+  
+  }
+  boolean result = userDoor == carDoor;
+  return result; 
+ }
+ /**
+  * Simulates a monty Hall game as played by the user.
+  *
+  */
+ public static void interactiveGame() {
   int carDoor = (int) (Math.random() * 3 + 1);
   
   int userDoor = getUserDoor();
@@ -38,9 +124,8 @@ public class MontyHall
   {
    System.out.println("You won a goat... Better luck next time!");
   }
-
-  
  }
+ 
  /**
   * This method returns what door is left besides the user door and car door
   *
@@ -79,6 +164,33 @@ public class MontyHall
   */
  public static int revealDoor(int invalid1, int invalid2)
  {
+  if (invalid1 == invalid2){
+   boolean randomBool = (int) Math.random() > 0.5;
+   if (invalid1 == 1) {
+     if (randomBool) { 
+      return 2;
+      }
+     else {
+      return 3;
+     }
+    }
+   if (invalid1 == 2) {
+     if (randomBool) { 
+      return 1;
+      }
+     else {
+      return 3; 
+     }
+    }
+   if (invalid1 == 3) {
+     if (randomBool) { 
+      return 1;
+      }
+     else {
+      return 2;
+     }
+    }
+   }
   for (int revealDoor = 1; revealDoor < 4; revealDoor++)
   {
    if (revealDoor != invalid1 && revealDoor != invalid2)
